@@ -1,0 +1,2 @@
+# Do not copy the libraries to github, they are by default installed in the portable directory.
+libraries/
