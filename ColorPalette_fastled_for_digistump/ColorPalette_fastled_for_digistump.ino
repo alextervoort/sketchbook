@@ -7,7 +7,7 @@
 #define COLOR_ORDER GRB
 CRGB leds[NUM_LEDS];
 
-#define UPDATES_PER_SECOND 100
+#define UPDATES_PER_SECOND 10
 
 // This example shows several ways to set up and use 'palettes' of colors
 // with FastLED.
@@ -36,18 +36,18 @@ extern const TProgmemPalette16 myRedWhiteBluePalette_p PROGMEM;
 
 
 void setup() {
-    delay( 3000 ); // power-up safety delay
+    delay( 1000 ); // power-up safety delay
     FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
     FastLED.setBrightness(  BRIGHTNESS );
     
-    currentPalette = RainbowColors_p;
+    currentPalette = ForestColors_p; //RainbowColors_p;
     currentBlending = LINEARBLEND;
 }
 
 
 void loop()
 {
-    ChangePalettePeriodically();
+    //ChangePalettePeriodically();
     
     static uint8_t startIndex = 0;
     startIndex = startIndex + 1; /* motion speed */
@@ -60,11 +60,11 @@ void loop()
 
 void FillLEDsFromPaletteColors( uint8_t colorIndex)
 {
-    uint8_t brightness = 255;
+    uint8_t brightness = 120;
     
     for( int i = 0; i < NUM_LEDS; i++) {
         leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
-        colorIndex += 3;
+        colorIndex += 1;
     }
 }
 
