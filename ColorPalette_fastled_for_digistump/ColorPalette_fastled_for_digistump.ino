@@ -2,12 +2,12 @@
 
 #define LED_PIN     0
 #define NUM_LEDS    3
-#define BRIGHTNESS  64
+#define BRIGHTNESS  128
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
 CRGB leds[NUM_LEDS];
 
-#define UPDATES_PER_SECOND 10
+#define UPDATES_PER_SECOND 20
 
 // This example shows several ways to set up and use 'palettes' of colors
 // with FastLED.
