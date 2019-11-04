@@ -17,6 +17,7 @@
   http://www.arduino.cc/en/Tutorial/Debounce
 */
 #include <FastLED.h>
+#include <Button.h>
 
 // constants won't change. They're used here to set pin numbers:
 #define BTN_MNU     2      // the number of the menu button
@@ -26,7 +27,7 @@
 #define DATA_PIN    0      // the pin connecting to the led strip
 #define NUM_LEDS    2
 #define UPDATES_PER_SECOND 20
-#define BRIGHTNESS  128
+//#define BRIGHTNESS  10
 #define LED_TYPE    WS2812
 #define COLOR_ORDER GRB
 
@@ -40,6 +41,7 @@ int buttonState;              // the current reading from the input pin
 int lastButtonState = LOW;    // the previous reading from the input pin
 int mcount = 100;             //count number of button presses
 int palettechoice = 1;        //palette chooser
+uint8_t brightness = 125;
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -57,7 +59,7 @@ void setup() {
   digitalWrite(LED_PIN, ledState);
 
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  FastLED.setBrightness(BRIGHTNESS);
+  FastLED.setBrightness(brightness);
   //currentPalette = PartyColors_p;// LavaColors_p; //HeatColors_p; //CloudColors_p; //ForestColors_p; //RainbowColors_p;
   currentBlending = LINEARBLEND;
 }
@@ -88,6 +90,7 @@ void loop() {
       if (buttonState == LOW) {
         ledState = !ledState;
         palettechoice += 1;
+        //brightness += 20;
         //mcount = mcount + 20;
       }
     }
@@ -128,7 +131,7 @@ void wsledtoggle ()
 
 void FillLEDsFromPaletteColors( uint8_t colorIndex)
 {
-    uint8_t brightness = 125;
+    //uint8_t brightness = 125;
     
     for( int i = 0; i < NUM_LEDS; i++) {
         leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
