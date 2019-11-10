@@ -10,9 +10,9 @@
 #include <JC_Button.h>          // https://github.com/JChristensen/JC_Button
 
 // constants won't change. They're used here to set pin numbers:
-Button BTN_MNU(2);          // the number of the menu button
+Button BTN_MNU(5);          // the number of the menu button
 Button BTN_UP(3);           // the number of the up button
-Button BTN_DN(4);           // the number of the down button
+Button BTN_DN(2);           // the number of the down button
 
 //const byte LED_PIN = 1;     // the number of the onboard LED pin
 const byte DATA_PIN = 0;    // the pin connecting to the led strip
