@@ -30,7 +30,7 @@ bool menuenable = false;      // true if in menu
 //bool ledState = LOW;          // the initial state of the output pin
 byte palettechoice = 1;       // palette chooser
 byte brightness = 105;        // Initial brightness
-byte updates_per_second = 20; // Update speed
+byte updates_per_second = 50; // Update speed
 
 
 void setup() {
@@ -61,47 +61,42 @@ void loop() {
 
 void Menu()
 {
-  byte menulevel = 1;           //keep track of menu depth
-  FastLED.clear();
-  leds[0] = CRGB::Red; 
-  //FastLED.show();
-  //ledState = HIGH;              //  LED on in menu
-  //digitalWrite(LED_PIN, ledState);
+  byte menulevel = 1;           // Keep track of menu depth
+  FastLED.clear();              // Start with all led's off
 
-  while ( menuenable ){         // stay in menu untill menu button is pressed again
-  BTN_MNU.read(); 
-    if (BTN_MNU.wasPressed()) {
-      menulevel++;
-      if (menulevel > 3) {menuenable = false; }
-      if (menulevel == 2) {leds[0] = CRGB::Blue; }
-      if (menulevel == 3) {leds[0] = CRGB::Green; }
-      }
+  while ( menuenable ){         // stay in menu untill all menu levels are used
+    if (menulevel > 3) {menuenable = false; }
+    if (menulevel == 1) {leds[0] = CRGB::Red; }
+    if (menulevel == 2) {leds[0] = CRGB::Blue; }
+    if (menulevel == 3) {leds[0] = CRGB::Green; }
     
-  BTN_UP.read(); 
-    if (BTN_UP.wasPressed()) {
-      if (menulevel == 1) {palettechoice++; // next palette
-        ChangePalette();    // set currentPalette based on palettechoice
-        }
-      if (menulevel == 2) {updates_per_second -= 20; }    // Faster
-      if (menulevel == 3) {ChangeBrightness();}
-    }
-  
-  BTN_DN.read(); 
-  if (BTN_DN.wasPressed()) {
-    if (menulevel == 1) {palettechoice--; // previous palette
-        ChangePalette();    // set currentPalette based on palettechoice
+    BTN_MNU.read(); 
+      if (BTN_MNU.wasPressed()) { menulevel++; }
+    
+    BTN_UP.read(); 
+      if (BTN_UP.wasPressed()) {
+        if (menulevel == 1) {palettechoice++; // next palette
+          ChangePalette();    // set currentPalette based on palettechoice
+          }
+        if (menulevel == 2) { ChangeSpeed(true); }    // Faster
+        if (menulevel == 3) { ChangeBrightness(true); }      // Brighter
       }
-    if (menulevel == 2) {updates_per_second += 20; }      // Slower
-    if (menulevel == 3) {ChangeBrightness();} 
-    }
   
-  // show changes
-  for( int i = 1; i < NUM_LEDS; i++) {
-    leds[i] = ColorFromPalette( currentPalette, 127, brightness, currentBlending);
-  }
-  FastLED.show();
-  //FastLED.delay(1000 / updates_per_second);  
-  }
+    BTN_DN.read(); 
+    if (BTN_DN.wasPressed()) {
+      if (menulevel == 1) {palettechoice--; // previous palette
+          ChangePalette();    // set currentPalette based on palettechoice
+        }
+      if (menulevel == 2) { ChangeSpeed(false); }      // Slower
+      if (menulevel == 3) { ChangeBrightness(false); }       // Dimmer
+      }
+  
+    // show changes
+    for( int i = 1; i < NUM_LEDS; i++) {
+      leds[i] = ColorFromPalette( currentPalette, 127, brightness, currentBlending);
+    }
+    FastLED.show();
+    }
 }
 
 
@@ -125,14 +120,15 @@ void ChangePalette()
                              palettechoice = 0;}
 }
 
-void ChangeBrightness()
+void ChangeBrightness(bool up)    // Brightness up if true, down otherwise. Keep levels between 25 and 250
 {
-  FastLED.clear();
-  if( brightness < 205) {
-    brightness += 50;
-  }
-  else {
-    brightness = 0;
-  }
+  if( brightness < 225 && up ) { brightness += 25; }
+  if( brightness > 50 && !up ) { brightness -= 25; }
   FastLED.setBrightness(brightness);
+} 
+
+void ChangeSpeed(bool faster)   // Increase update speed if true, slow otherwise. Keep speed between ?
+{
+  if( updates_per_second > 15 && faster ) { updates_per_second -= 10; }
+  if( updates_per_second < 200 && !faster ) { updates_per_second += 10; }
 }
