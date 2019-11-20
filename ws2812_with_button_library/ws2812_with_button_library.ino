@@ -7,15 +7,14 @@
  *
 */
 #include <FastLED.h>
-#include <JC_Button.h>          // https://github.com/JChristensen/JC_Button
+#include <JC_Button.h>       // https://github.com/JChristensen/JC_Button
 
-// constants won't change. They're used here to set pin numbers:
-Button BTN_MNU(5);          // the number of the menu button
-Button BTN_UP(3);           // the number of the up button
+// constants won't change
+Button BTN_MNU(3);          // the number of the menu button
+Button BTN_UP(0);           // the number of the up button
 Button BTN_DN(2);           // the number of the down button
 
-//const byte LED_PIN = 1;     // the number of the onboard LED pin
-const byte DATA_PIN = 0;    // the pin connecting to the led strip
+const byte DATA_PIN = 1;    // the pin connecting to the led strip
 const byte NUM_LEDS = 3;    // number of conneced leds
 
 #define LED_TYPE    WS2812
@@ -27,7 +26,6 @@ TBlendType    currentBlending;
 
 // Variables will change:
 bool menuenable = false;      // true if in menu
-//bool ledState = LOW;          // the initial state of the output pin
 byte palettechoice = 1;       // palette chooser
 byte brightness = 105;        // Initial brightness
 byte updates_per_second = 50; // Update speed
@@ -37,9 +35,6 @@ void setup() {
   BTN_MNU.begin();
   BTN_UP.begin();
   BTN_DN.begin();
-
-  //pinMode(LED_PIN, OUTPUT);          // set onboard LED as output
-  //digitalWrite(LED_PIN, ledState);   // set initial onboard LED state
 
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(brightness);
@@ -116,8 +111,8 @@ void ChangePalette()
   if( palettechoice == 4)  { currentPalette = HeatColors_p;        currentBlending = LINEARBLEND; }
   if( palettechoice == 5)  { currentPalette = CloudColors_p;       currentBlending = LINEARBLEND; }
   if( palettechoice == 6)  { currentPalette = ForestColors_p;      currentBlending = LINEARBLEND; }
-  if( palettechoice == 7)  { currentPalette = RainbowColors_p;     currentBlending = LINEARBLEND; 
-                             palettechoice = 0;}
+  if( palettechoice == 7)  { currentPalette = RainbowColors_p;     currentBlending = LINEARBLEND; }
+  if( palettechoice == 0 || palettechoice > 7)  { currentPalette = RainbowColors_p; currentBlending = LINEARBLEND; palettechoice = 1;}
 }
 
 void ChangeBrightness(bool up)    // Brightness up if true, down otherwise. Keep levels between 25 and 250
